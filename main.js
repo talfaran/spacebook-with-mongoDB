@@ -85,6 +85,8 @@ var SpacebookApp = function() {
             var $commentsList = $(btn).closest('.post').find('.comments-list')
             _updateComments($commentsList, postIndex)
         }
+
+        viewComments($(btn).siblings('.view-comments'))
     }
 
 
