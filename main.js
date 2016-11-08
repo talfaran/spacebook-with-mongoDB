@@ -51,20 +51,20 @@ function removePost(btn) {
     updatePosts();
 }
 
-function updateComments(commentsList, postIndex) {
-    commentsList.empty()
+function updateComments($commentsList, postIndex) {
+    $commentsList.empty()
     posts[postIndex].comments.forEach(function(comment) {
-        commentsList.append('<li class="comment">' + comment.text + " - " + comment.user +
+        $commentsList.append('<li class="comment">' + comment.text + " - " + comment.user +
             '<button type="button" class="btn btn-sm btn-danger remove-comment">Remove Comment</button></li>')
     })
 }
 
 function addComment(btn) {
 
-    var comment = $(btn).siblings('.comment');
-    var user = $(btn).siblings('.name');
+    var $comment = $(btn).siblings('.comment');
+    var $user = $(btn).siblings('.name');
 
-    if (comment.val() === "" || user.val() === "") {
+    if ($comment.val() === "" || $user.val() === "") {
         alert("Please enter your name and a comment!")
         return;
     }
@@ -72,16 +72,16 @@ function addComment(btn) {
     // finding the index of the post in the page... we will use it in #createComment
     var postIndex = $(btn).closest('.post').index();
 
-    var newComment = { text: comment.val(), user: user.val() };
+    var newComment = { text: $comment.val(), user: $user.val() };
 
     posts[postIndex].comments.push(newComment);
 
-    comment.val("");
-    user = user.val("");
+    $comment.val("");
+    $user.val("");
 
     if ($(btn).closest('.post').find('.view-comments').hasClass('hidden')) {
-        var commentsList = $(btn).closest('.post').find('.comments-list')
-        updateComments(commentsList, postIndex)
+        var $commentsList = $(btn).closest('.post').find('.comments-list')
+        updateComments($commentsList, postIndex)
     }
 }
 
@@ -91,30 +91,30 @@ function viewComments(btn) {
     $(btn).addClass('hidden');
     $(btn).closest('.post').find('.hide-comments').removeClass('hidden')
 
-    var commentsList = $(btn).closest('.post').find('.comments-list')
+    var $commentsList = $(btn).closest('.post').find('.comments-list')
     var postIndex = $(btn).closest('.post').index();
 
-    updateComments(commentsList, postIndex)
+    updateComments($commentsList, postIndex)
 }
 
 function hideComments(btn) {
     $(btn).addClass('hidden');
     $(btn).closest('.post').find('.view-comments').removeClass('hidden');
 
-    var commentsList = $(btn).closest('.post').find('.comments-list');
+    var $commentsList = $(btn).closest('.post').find('.comments-list');
 
-    commentsList.empty();
+    $commentsList.empty();
 
 }
 
 function deleteComment(btn) {
-    var commentsList = $(btn).closest('.post').find('.comments-list')
+    var $commentsList = $(btn).closest('.post').find('.comments-list')
     var postIndex = $(btn).closest('.post').index();
     var commentIndex = $(btn).closest('.comment').index();
 
     //remove the comment and refresh the view
     posts[postIndex].comments.splice(commentIndex, 1);
-    updateComments(commentsList, postIndex)
+    updateComments($commentsList, postIndex)
 }
 
 $(document).ready(function() {
