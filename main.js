@@ -2,6 +2,7 @@ var SpacebookApp = function() {
 
     var posts = [];
     var currentId = 0;
+    var $posts = $(".posts")
 
     var post = function(btn) {
 
@@ -20,18 +21,14 @@ var SpacebookApp = function() {
 
     function _updatePosts() {
 
-        $('.posts').empty();
+        $posts.empty();
+        var source = $('#post-template').html();
+        var template = Handlebars.compile(source);
+
         posts.forEach(function(post) {
-
-            var commentsContainer = '<div class="comments-container">' + '<ul class=comments-list></ul>' +
-                '<input class="form-control name" type="text" placeholder="Name">' +
-                '<input class="form-control comment" type="text" placeholder="Comment">' +
-                '<button type="button" class="btn btn-sm btn-primary add-comment">Post Comment</button>' +
-                '<button type="button" class="btn btn-sm btn-primary view-comments">View Comments</button>' +
-                '<button type="button" class="btn btn-sm btn-primary hide-comments hidden">Hide Comments</button> </div>';
-
-            $('.posts').append('<div class="post" data-id="' + post.id + '">' + post.text +
-                '<button type="button" class="btn btn-danger remove-post">Remove Post</button>' + commentsContainer + '</div>')
+            var newHTML = template(post);
+            // append our new html to the page
+            $posts.append(newHTML);
         })
     }
 
@@ -42,9 +39,13 @@ var SpacebookApp = function() {
 
     function _updateComments($commentsList, postIndex) {
         $commentsList.empty()
+        var source = $('#comment-template').html();
+        var template = Handlebars.compile(source);
         posts[postIndex].comments.forEach(function(comment) {
-            $commentsList.append('<li class="comment">' + comment.text + " - " + comment.user +
-                '<button type="button" class="btn btn-sm btn-danger remove-comment">Remove Comment</button></li>')
+            var newHTML = template(comment);
+            // append our new html to the page
+            $commentsList.append(newHTML);
+
         })
     }
 
@@ -58,8 +59,6 @@ var SpacebookApp = function() {
         })
         _updatePosts();
     }
-
-
 
     var addComment = function(btn) {
 
@@ -121,7 +120,6 @@ var SpacebookApp = function() {
         _updateComments($commentsList, postIndex)
     }
 
-
     return {
         post: post,
         removePost: removePost,
@@ -133,26 +131,26 @@ var SpacebookApp = function() {
 
 }
 
-
 var app = SpacebookApp();
 var post = app.post;
+var $posts = $(".posts")
 
-$('.posts').on('click', '.remove-post', function() {
+$posts.on('click', '.remove-post', function() {
     app.removePost(this);
 });
 
-$('.posts').on('click', '.add-comment', function() {
+$posts.on('click', '.add-comment', function() {
     app.addComment(this);
 });
 
-$('.posts').on('click', '.view-comments', function() {
+$posts.on('click', '.view-comments', function() {
     app.viewComments(this);
 });
 
-$('.posts').on('click', '.hide-comments', function() {
+$posts.on('click', '.hide-comments', function() {
     app.hideComments(this);
 });
 
-$('.posts').on('click', '.remove-comment', function() {
+$posts.on('click', '.remove-comment', function() {
     app.deleteComment(this);
 });
