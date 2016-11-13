@@ -10,14 +10,12 @@ var SpacebookApp = function() {
         var post = input.val();
         if (post === "") {
             alert("Please enter text!");
-
         } else {
             _addPost(post);
             input.val("");
             _renderPosts();
         }
     };
-
 
     function _renderPosts() {
 
