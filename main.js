@@ -122,6 +122,12 @@ var SpacebookApp = function() {
 
     var toggleComments = function(btn) {
         var $commentsList = $(btn).closest('.post').find('.comments-list');
+        //if the comments list is hidden we first need to build it!
+        //TODO - stop this rebuilding if already built!
+        if (!$commentsList.hasClass('show')) {
+            var postIndex = $(btn).closest('.post').index();
+            $commentsList = _updateComments($commentsList, postIndex)
+        }
         $commentsList.toggleClass('show');
     }
 
