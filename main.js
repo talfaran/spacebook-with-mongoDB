@@ -37,7 +37,24 @@ var SpacebookApp = function() {
         currentId++
     }
 
+    function _updateCommentCount($commentsList, postIndex) {
+        $post = $commentsList.closest('.post')
+        var source = $('#post-template').html();
+        var template = Handlebars.compile(source);
+        var newHTML = template(posts[postIndex]);
+        //clear the old post
+        $post.empty();
+        //append the replacement post leaving the old div.post wrapper in place
+        $post.append(newHTML);
+        //to delete the old wrapper, step down a level and remove the parent 
+        $replacementPost = $post.children()
+        $replacementPost.unwrap();
+        //we deleted the old $commentsList so we need to return the new list
+        return $replacementPost.find('.comments-list')
+    }
+
     function _updateComments($commentsList, postIndex) {
+        $commentsList = _updateCommentCount($commentsList, postIndex) //need this to update comment count, yuck!
         $commentsList.empty()
         var source = $('#comment-template').html();
         var template = Handlebars.compile(source);
@@ -45,8 +62,8 @@ var SpacebookApp = function() {
             var newHTML = template(comment);
             // append our new html to the page
             $commentsList.append(newHTML);
-
         })
+        return $commentsList
     }
 
     var removePost = function(btn) {
@@ -72,7 +89,7 @@ var SpacebookApp = function() {
 
         // finding the index of the post in the page... we will use it in #createComment
         var postIndex = $(btn).closest('.post').index();
-
+        var $commentsList = $(btn).closest('.post').find('.comments-list');
         var newComment = { text: $comment.val(), user: $user.val() };
 
         posts[postIndex].comments.push(newComment);
@@ -80,34 +97,32 @@ var SpacebookApp = function() {
         $comment.val("");
         $user.val("");
 
-        if ($(btn).closest('.post').find('.view-comments').hasClass('hidden')) {
-            var $commentsList = $(btn).closest('.post').find('.comments-list')
-            _updateComments($commentsList, postIndex)
-        }
+        $commentsList = _updateComments($commentsList, postIndex)
+        $commentsList.addClass('show');
 
-        viewComments($(btn).siblings('.view-comments'))
+        //viewComments($(btn).siblings('.view-comments'))
     }
 
 
-    var viewComments = function(btn) {
+    // var viewComments = function(btn) {
+    //     var $commentsList = $(btn).closest('.post').find('.comments-list')
+    //     var postIndex = $(btn).closest('.post').index();
+    //     $commentsList = _updateComments($commentsList, postIndex)
+    //     $hideBtn = $commentsList.closest(".post").find('.hide-comments')
+    //     $hideBtn.removeClass('hidden')
+    //     $hideBtn.siblings('.view-comments').addClass('hidden');
+    // }
 
-        $(btn).addClass('hidden');
-        $(btn).closest('.post').find('.hide-comments').removeClass('hidden')
+    // var hideComments = function(btn) {
+    //     $(btn).addClass('hidden');
+    //     $(btn).closest('.post').find('.view-comments').removeClass('hidden');
+    //     var $commentsList = $(btn).closest('.post').find('.comments-list');
+    //     $commentsList.empty();
+    // }
 
-        var $commentsList = $(btn).closest('.post').find('.comments-list')
-        var postIndex = $(btn).closest('.post').index();
-
-        _updateComments($commentsList, postIndex)
-    }
-
-    var hideComments = function(btn) {
-        $(btn).addClass('hidden');
-        $(btn).closest('.post').find('.view-comments').removeClass('hidden');
-
+    var toggleComments = function(btn) {
         var $commentsList = $(btn).closest('.post').find('.comments-list');
-
-        $commentsList.empty();
-
+        $commentsList.toggleClass('show');
     }
 
     var deleteComment = function(btn) {
@@ -124,12 +139,13 @@ var SpacebookApp = function() {
         post: post,
         removePost: removePost,
         addComment: addComment,
-        viewComments: viewComments,
-        hideComments: hideComments,
-        deleteComment: deleteComment
+        // viewComments: viewComments,
+        // hideComments: hideComments,
+        deleteComment: deleteComment,
+        toggleComments: toggleComments
     }
-
 }
+
 
 var app = SpacebookApp();
 var post = app.post;
@@ -143,14 +159,18 @@ $posts.on('click', '.add-comment', function() {
     app.addComment(this);
 });
 
-$posts.on('click', '.view-comments', function() {
-    app.viewComments(this);
-});
+// $posts.on('click', '.view-comments', function() {
+//     app.viewComments(this);
+// });
 
-$posts.on('click', '.hide-comments', function() {
-    app.hideComments(this);
-});
+// $posts.on('click', '.hide-comments', function() {
+//     app.hideComments(this);
+// });
 
 $posts.on('click', '.remove-comment', function() {
     app.deleteComment(this);
+});
+
+$posts.on('click', '.toggle-comments', function() {
+    app.toggleComments(this);
 });

@@ -25,15 +25,15 @@
         </div>
     </div>
     <script id="post-template" type="text/x-handlebars-template">
-        <div class="post" data-id={{id}}> {{text}}
+        <div class="post" data-id={{id}}> {{text}} <a class="toggle-comments" href="#"> {{comments.length}} comments </a>
             <button type="button" class="btn btn-danger remove-post">Remove Post</button>
             <div class="comments-container">
                 <ul class=comments-list></ul>
                 <input class="form-control name" type="text" placeholder="Name">
                 <input class="form-control comment" type="text" placeholder="Comment">
                 <button type="button" class="btn btn-sm btn-primary add-comment">Post Comment</button>
-                <button type="button" class="btn btn-sm btn-primary view-comments">View Comments</button>
-                <button type="button" class="btn btn-sm btn-primary hide-comments hidden">Hide Comments</button>
+                <!--<button type="button" class="btn btn-sm btn-primary view-comments">View Comments</button>
+                <button type="button" class="btn btn-sm btn-primary hide-comments hidden">Hide Comments</button> -->
             </div>
         </div>
     </script>

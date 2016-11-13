@@ -9,3 +9,11 @@
 .btn-danger {
     margin: 5px 0 5px 10px;
 }
+
+.comments-list {
+    display: none;
+}
+
+.comments-list .show {
+    display: block;
+}
