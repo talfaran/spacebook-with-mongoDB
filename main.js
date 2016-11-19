@@ -8,7 +8,7 @@ var SpacebookApp = function() {
 
     function _getFromLocalStorage() {
         posts = JSON.parse(localStorage.getItem(POST_STORE) || '{ "posts": [], "currentId": 0 }');
-        console.log(posts);
+        //console.log(posts);
     }
 
     function _saveToLocalStorage() {
@@ -32,7 +32,6 @@ var SpacebookApp = function() {
     };
 
     function _renderPosts() {
-        _saveToLocalStorage();
 
         $posts.empty();
         var source = $('#post-template').html();
@@ -48,6 +47,8 @@ var SpacebookApp = function() {
     function _addPost(newPost) {
         posts.posts.push({ text: newPost, id: posts.currentId, comments: [] });
         posts.currentId++;
+        _saveToLocalStorage();
+
     }
 
     function _renderSinglePost($commentsList, postIndex) {
@@ -68,7 +69,6 @@ var SpacebookApp = function() {
     }
 
     function _renderComments($commentsList, postIndex) {
-        _saveToLocalStorage();
         //first to update the commentCount we need to rerender the whole post, yuck!
         $commentsList = _renderSinglePost($commentsList, postIndex);
         $commentsList.empty();
@@ -91,6 +91,8 @@ var SpacebookApp = function() {
             return post.id != id;
         });
         _renderPosts();
+        _saveToLocalStorage();
+
     };
 
     var addComment = function(btn) {
@@ -116,25 +118,9 @@ var SpacebookApp = function() {
         $commentsList = _renderComments($commentsList, postIndex);
         $commentsList.addClass('show');
 
-        //viewComments($(btn).siblings('.view-comments'));
+        _saveToLocalStorage();
+
     };
-
-
-    // var viewComments = function(btn) {
-    //     var $commentsList = $(btn).closest('.post').find('.comments-list')
-    //     var postIndex = $(btn).closest('.post').index();
-    //     $commentsList = _renderComments($commentsList, postIndex)
-    //     $hideBtn = $commentsList.closest(".post").find('.hide-comments')
-    //     $hideBtn.removeClass('hidden')
-    //     $hideBtn.siblings('.view-comments').addClass('hidden');
-    // }
-
-    // var hideComments = function(btn) {
-    //     $(btn).addClass('hidden');
-    //     $(btn).closest('.post').find('.view-comments').removeClass('hidden');
-    //     var $commentsList = $(btn).closest('.post').find('.comments-list');
-    //     $commentsList.empty();
-    // }
 
     var toggleComments = function(btn) {
         var $commentsList = $(btn).closest('.post').find('.comments-list');
@@ -156,14 +142,14 @@ var SpacebookApp = function() {
         $commentsList = _renderComments($commentsList, postIndex);
         //finally show the list minus the comment that was removed
         $commentsList.addClass('show');
+        _saveToLocalStorage();
+
     };
 
     return {
         post: post,
         removePost: removePost,
         addComment: addComment,
-        // viewComments: viewComments,
-        // hideComments: hideComments,
         deleteComment: deleteComment,
         toggleComments: toggleComments
     };
@@ -181,14 +167,6 @@ $posts.on('click', '.remove-post', function() {
 $posts.on('click', '.add-comment', function() {
     app.addComment(this);
 });
-
-// $posts.on('click', '.view-comments', function() {
-//     app.viewComments(this);
-// });
-
-// $posts.on('click', '.hide-comments', function() {
-//     app.hideComments(this);
-// });
 
 $posts.on('click', '.remove-comment', function() {
     app.deleteComment(this);
