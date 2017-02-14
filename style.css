@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 .post {
     padding: 20px 0;
 }
@@ -17,3 +18,12 @@
 .comments-list .show {
     display: block;
 }
+=======
+.comments-container {
+  display: none;
+}
+
+.show {
+  display: block;
+}
+>>>>>>> 94bbb049470be46ca9698bb9f508dabad78f5f37
