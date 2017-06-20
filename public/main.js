@@ -1,8 +1,8 @@
 var SpacebookApp = function() {
 
   var posts = [
-    // { text: "hello", comments: [{ text: "hello", user: "me" }] },
-    // { text: "hello again", comments: [{ text: "hey", user: "you" }] }
+    { text: "hello", comments: [{ text: "hello", user: "me" }] },
+    { text: "hello again", comments: [{ text: "hey", user: "you" }] }
   ];
 
   var $posts = $(".posts");
