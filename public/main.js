@@ -1,9 +1,6 @@
 var SpacebookApp = function() {
 
-  var posts = [
-    { text: "hello", comments: [{ text: "hello", user: "me" }] },
-    { text: "hello again", comments: [{ text: "hey", user: "you" }] }
-  ];
+  var posts = [];
 
   var $posts = $(".posts");
 
@@ -15,6 +12,7 @@ var SpacebookApp = function() {
     var template = Handlebars.compile(source);
     for (var i = 0; i < posts.length; i++) {
       var newHTML = template(posts[i]);
+      console.log(newHTML);
       $posts.append(newHTML);
       _renderComments(i)
     }
@@ -28,7 +26,7 @@ var SpacebookApp = function() {
 
   function _renderComments(postIndex) {
     var post = $(".post")[postIndex];
-    $commentsList = $(post).find('.comments-container')
+    $commentsList = $(post).find('.comments-list')
     $commentsList.empty();
     var source = $('#comment-template').html();
     var template = Handlebars.compile(source);
