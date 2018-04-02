@@ -6,15 +6,15 @@ var mongoose = require('mongoose');
 //you don't need a comments collection
 //you only need a posts collection
 
-var commentSchema = new mongoose.Schema({
+let commentSchema = new mongoose.Schema({
 
 });
 
 
-var postSchema = new mongoose.Schema({
+let postSchema = new mongoose.Schema({
 
 });
 
-var Post = mongoose.model('post', postSchema)
+let Post = mongoose.model('post', postSchema)
 
 module.exports = Post
