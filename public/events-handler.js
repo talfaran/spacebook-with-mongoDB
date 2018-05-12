@@ -18,8 +18,8 @@ class EventsHandler {
             } else {
                 this.postsRepository.addPost($input.val()).then(() => {
                     this.postsRepository.getpostfromDB().then((posts) => {
-                    this.postsRenderer.renderPosts(posts);
-                    $input.val("");
+                        this.postsRenderer.renderPosts(posts);
+                        $input.val("");
                     })
                 })
             }
@@ -37,7 +37,7 @@ class EventsHandler {
         });
 
     }
-
+    
     registerToggleComments() {
         this.$posts.on('click', '.toggle-comments', (event) => {
             let $clickedPost = $(event.currentTarget).closest('.post');
@@ -59,7 +59,8 @@ class EventsHandler {
             let newComment = { text: $comment.val(), user: $user.val() };
             this.postsRepository.addComment(newComment, postId).then(() => {
                 this.postsRepository.getpostfromDB().then((posts) => {
-                    this.postsRenderer.renderComments(posts, postIndex);
+                    this.postsRepository.posts = posts
+                    this.postsRenderer.renderComments( this.postsRepository.posts , postIndex);
                     $comment.val("");
                     $user.val("");
                 })
@@ -75,8 +76,13 @@ class EventsHandler {
             let commentId = $(event.currentTarget).closest('.comment').data().id;
             let postId = $(event.currentTarget).closest('.post').data().id;
 
-            this.postsRepository.deleteComment(postId, commentId);
-        //    this.postsRenderer.renderComments(this.postsRepository.posts, postIndex);
+            this.postsRepository.deleteComment(postId, commentId).then((updatedPost) => {
+                this.postsRepository.getpostfromDB().then((posts) => {
+                    this.postsRepository.posts = posts;
+                    this.postsRenderer.renderComments(this.postsRepository.posts , postIndex);
+                })
+            })
+
         });
     }
 }

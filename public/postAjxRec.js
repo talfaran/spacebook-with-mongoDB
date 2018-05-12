@@ -36,9 +36,6 @@ class AjaxFunctions {
         console.log(postId + commentId)
         return $.ajax('/deleteComment/' + postId + '/' + commentId, {
             method: "DELETE",    
-        }).then ((postWithoutComment) => {
-            console.log(PostWithoutComment);
-            return PostWithoutComment;
         })
     }
 

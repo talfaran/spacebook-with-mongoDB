@@ -38,7 +38,6 @@ class PostsRepository {
 
     deleteComment(postId, commentId) {
         return this.AjaxFunctionsApi.removeCommentFromPost(postId, commentId)
-       // this.posts[postIndex].comments.splice(commentIndex, 1);
     };
 }
 
