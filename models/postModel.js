@@ -4,15 +4,20 @@ var mongoose = require('mongoose');
 //to define the relationship between posts and comments
 
 
-let commentSchema = new mongoose.Schema({
+var commentSchema = new mongoose.Schema({
+    text: String,
+    user: String
+  });
+  
+  
+  var postSchema = new mongoose.Schema({
+    text: String,
+    comments: [commentSchema]
+  });
 
-});
+let Post = mongoose.model('post', postSchema);
+let CommentModel = mongoose.model('comment', commentSchema);
 
 
-let postSchema = new mongoose.Schema({
+module.exports = {CommentModel: CommentModel, Post: Post}
 
-});
-
-let Post = mongoose.model('post', postSchema)
-
-module.exports = Post

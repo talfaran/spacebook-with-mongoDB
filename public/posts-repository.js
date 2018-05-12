@@ -1,26 +1,45 @@
-    /**
-     * @class Responsible for storing and manipulating Spacebook posts, in-memory
-     */
+/**
+ * @class Responsible for storing and manipulating Spacebook posts, in-memory
+ */
+import AjaxFunctions from './postAjxRec.js';
+
 class PostsRepository {
     constructor() {
         this.posts = [];
+        this.AjaxFunctionsApi = new AjaxFunctions();
+    }
+
+      getpostfromDB() {
+       return  this.AjaxFunctionsApi.fetch((postFromDB) => {
+             this.posts = postFromDB;
+         });
+
+
     }
 
     addPost(postText) {
-        this.posts.push({ text: postText, comments: [] });
+      return  this.AjaxFunctionsApi.postUserData(postText);
+        
     }
 
-    removePost(index) {
-        this.posts.splice(index, 1);
+    removePost(postId) {
+      return this.AjaxFunctionsApi.removePostFromDB(postId).then((allUpdatedPosts) => {
+            console.log(allUpdatedPosts)
+            this.posts = allUpdatedPosts
+            })
+        
+         
     }
-    
-    addComment(newComment, postIndex) {
-        this.posts[postIndex].comments.push(newComment);
+
+    addComment(newComment, postId) {
+     return this.AjaxFunctionsApi.makeNewCommentInDB(newComment, postId)
+      
     };
 
-    deleteComment(postIndex, commentIndex) {
-        this.posts[postIndex].comments.splice(commentIndex, 1);
-      };
+    deleteComment(postId, commentId) {
+        return this.AjaxFunctionsApi.removeCommentFromPost(postId, commentId)
+       // this.posts[postIndex].comments.splice(commentIndex, 1);
+    };
 }
 
 export default PostsRepository
